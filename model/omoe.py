@@ -21,12 +21,9 @@ class OnegateMixtureOfExperts(nn.Module):
         self.shared_layer = nn.ModuleList(
             [SLP(input_size, expert_size) for _ in range(num_experts)]
         )
-        self.gate = nn.ParameterList(
-            [torch.zeros(input_size, requires_grad=True) for _ in num_experts]
+        self.gate = nn.Parameter(
+            torch.zeros(input_size, num_experts), requires_grad=True
         )
-        # self.gate = nn.Parameter(
-        #     torch.zeros(input_size, num_experts), requires_grad=True
-        # )
         self.tower_layer = nn.ModuleList(
             [MLP(expert_size, tower_size) for _ in range(num_tasks)]
         )
